@@ -27,7 +27,7 @@ class NewsContentAdapter(
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val news = newsList[position]
         holder.view.apply {
-            if (news.urlToImage.isBlank()) {
+            if (news.urlToImage.isNullOrBlank()) {
                 // No Image画像を表示
                 image.setImageResource(R.drawable.img_no_image)
             } else {
@@ -38,9 +38,11 @@ class NewsContentAdapter(
             title.text = news.title
 
             // ISO 8601(UTC)から"yyyy年M月d日(E) HH時mm分"(JST)に変換して表示
-            val c = Calendar.getInstance()
-            c.time = DateFormat.ISO_8601.parse(news.publishedAt) as Date
-            date.text = DateFormat.JAPANESE_DATE_TIME.format(c.time)
+            news.publishedAt?.let {
+                val c = Calendar.getInstance()
+                c.time = DateFormat.ISO_8601.parse(news.publishedAt) as Date
+                date.text = DateFormat.JAPANESE_DATE_TIME.format(c.time)
+            }
 
             root.setOnClickListener {
                 // TODO: 中間ブラウザで詳細を表示する

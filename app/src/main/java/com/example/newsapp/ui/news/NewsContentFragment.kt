@@ -58,6 +58,11 @@ class NewsContentFragment : Fragment() {
         }
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.fetchNews(requireContext(), arguments?.getString(ARG_CATEGORY_NAME)!!)
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
