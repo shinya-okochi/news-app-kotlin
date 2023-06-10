@@ -5,7 +5,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.newsapp.data.local.constant.NewsCategory
 import com.example.newsapp.databinding.FragmentNewsBinding
+import com.google.android.material.tabs.TabLayoutMediator
 
 class NewsFragment : Fragment() {
     companion object {
@@ -28,6 +30,15 @@ class NewsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.apply {
+            // タブに表示するカテゴリ
+            val categoryArray = NewsCategory.values().map { it.categoryName }
+            viewPager.adapter = NewsCategoryAdapter(this@NewsFragment, categoryArray)
+            // TabLayout を ViewPager2 にリンクしアタッチ
+            TabLayoutMediator(tabLayout, viewPager) { tab, position ->
+                tab.text = categoryArray[position]
+            }.attach()
+        }
     }
 
     override fun onDestroyView() {
