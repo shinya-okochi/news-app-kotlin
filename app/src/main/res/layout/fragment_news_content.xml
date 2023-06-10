@@ -52,6 +52,7 @@
                     style="?attr/materialButtonOutlinedStyle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:onClick="@{() -> viewModel.fetchNews(context, true)}"
                     android:text="@string/news_retry_button_text"
                     android:textColor="@color/gray"
                     app:layout_constraintBottom_toBottomOf="parent"
