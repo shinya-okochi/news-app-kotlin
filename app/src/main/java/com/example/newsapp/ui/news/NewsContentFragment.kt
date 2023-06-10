@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentNewsContentBinding
 
@@ -59,6 +60,15 @@ class NewsContentFragment : Fragment() {
                             requireContext(), LinearLayoutManager(requireContext()).orientation
                         )
                     )
+                    addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                            super.onScrolled(recyclerView, dx, dy)
+                            // リストの末尾に来た時の処理
+                            if (recyclerView.canScrollVertically(1).not()) {
+                                it.fetchNews(requireContext(), false)
+                            }
+                        }
+                    })
                 }
             }
         }

@@ -45,6 +45,7 @@ class NewsContentViewModel(app: Application) : AndroidViewModel(app) {
                     val response = result.body() ?: throw Exception()
                     newsList.addAll(response.articles)
                     newsContentAdapter?.notifyDataSetChanged()
+                    page = page.inc()
                     isLoading.value = false
                 } else throw Exception()
             } catch (e: Exception) {
