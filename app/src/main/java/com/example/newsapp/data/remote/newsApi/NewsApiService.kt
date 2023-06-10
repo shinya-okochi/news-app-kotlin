@@ -43,7 +43,7 @@ interface NewsApiService {
      */
     @GET("/v2/everything")
     suspend fun getEverythingNews(
-        @Query("api_key") apiKey: String,
+        @Query("apiKey") apiKey: String,
         @Query("q") q: String,
         @Query("page") page: Int,
     ): Response<EverythingNewsResponse?>
@@ -53,7 +53,7 @@ interface NewsApiService {
      */
     @GET("v2/top-headlines")
     suspend fun getTopHeadlinesNews(
-        @Query("api_key") apiKey: String,
+        @Query("apiKey") apiKey: String,
         @Query("country") country: String,
         @Query("category") category: String,
         @Query("page") page: Int,
