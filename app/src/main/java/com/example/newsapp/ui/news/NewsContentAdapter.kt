@@ -1,7 +1,9 @@
 package com.example.newsapp.ui.news
 
+import android.net.Uri
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.browser.customtabs.CustomTabsIntent
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.example.newsapp.R
@@ -45,7 +47,8 @@ class NewsContentAdapter(
             }
 
             root.setOnClickListener {
-                // TODO: 中間ブラウザで詳細を表示する
+                val customTabsIntent = CustomTabsIntent.Builder().build()
+                customTabsIntent.launchUrl(root.context, Uri.parse(news.url))
             }
         }
     }
