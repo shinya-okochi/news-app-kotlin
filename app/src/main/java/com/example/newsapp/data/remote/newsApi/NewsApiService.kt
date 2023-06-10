@@ -42,8 +42,8 @@ interface NewsApiService {
      * 検索条件に一致したニュースを取得する
      */
     @GET("/v2/everything")
-    fun getEverythingNews(
-        @Query("api_key") apiKey: String,
+    suspend fun getEverythingNews(
+        @Query("apiKey") apiKey: String,
         @Query("q") q: String,
         @Query("page") page: Int,
     ): Response<EverythingNewsResponse?>
@@ -52,8 +52,8 @@ interface NewsApiService {
      * カテゴリ毎に最新ニュースを取得する
      */
     @GET("v2/top-headlines")
-    fun getTopHeadlinesNews(
-        @Query("api_key") apiKey: String,
+    suspend fun getTopHeadlinesNews(
+        @Query("apiKey") apiKey: String,
         @Query("country") country: String,
         @Query("category") category: String,
         @Query("page") page: Int,
