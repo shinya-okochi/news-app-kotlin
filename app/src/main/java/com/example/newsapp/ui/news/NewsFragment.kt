@@ -36,7 +36,7 @@ class NewsFragment : Fragment() {
             viewPager.adapter = NewsCategoryAdapter(this@NewsFragment, categoryArray)
             // TabLayout を ViewPager2 にリンクしアタッチ
             TabLayoutMediator(tabLayout, viewPager) { tab, position ->
-                tab.text = categoryArray[position]
+                tab.text = categoryArray[position].uppercase()
             }.attach()
         }
     }
