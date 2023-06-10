@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.newsapp.databinding.FragmentNewsContentBinding
 
 class NewsContentFragment : Fragment() {
@@ -39,6 +41,21 @@ class NewsContentFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        binding.apply {
+            viewModel?.let {
+                it.newsContentAdapter = NewsContentAdapter(it.newsList)
+                recyclerView.apply {
+                    layoutManager = LinearLayoutManager(requireContext())
+                    setHasFixedSize(true)
+                    adapter = it.newsContentAdapter
+                    addItemDecoration(
+                        DividerItemDecoration(
+                            requireContext(), LinearLayoutManager(requireContext()).orientation
+                        )
+                    )
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
