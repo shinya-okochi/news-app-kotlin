@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.newsapp.R
 import com.example.newsapp.databinding.FragmentNewsContentBinding
 
 class NewsContentFragment : Fragment() {
@@ -42,7 +43,12 @@ class NewsContentFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
+            // 色の設定
+            swipeRefresh.setColorSchemeColors(requireContext().getColor(R.color.light_gray))
+
             viewModel?.let {
+                it.category = arguments?.getString(ARG_CATEGORY_NAME)!!
+
                 it.newsContentAdapter = NewsContentAdapter(it.newsList)
                 recyclerView.apply {
                     layoutManager = LinearLayoutManager(requireContext())
@@ -56,11 +62,8 @@ class NewsContentFragment : Fragment() {
                 }
             }
         }
-    }
 
-    override fun onResume() {
-        super.onResume()
-        viewModel.fetchNews(requireContext(), arguments?.getString(ARG_CATEGORY_NAME)!!)
+        viewModel.fetchNews(requireContext(), true)
     }
 
     override fun onDestroyView() {

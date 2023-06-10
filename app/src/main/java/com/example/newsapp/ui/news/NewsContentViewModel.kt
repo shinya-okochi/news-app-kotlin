@@ -13,25 +13,34 @@ class NewsContentViewModel(app: Application) : AndroidViewModel(app) {
     // View表示用変数
     var isLoading = MutableLiveData(false)
     var isError = MutableLiveData(false)
+    var isRefresh = MutableLiveData(false)
+
+    var category: String? = null
 
     var newsContentAdapter: NewsContentAdapter? = null
     var newsList = mutableListOf<Article>()
 
     // News APIで取得するデータのページ
-    var page = 1
+    private var page = 1
 
     /**
      * 最新のニュースを取得する
      */
-    fun fetchNews(context: Context, category: String) {
-        isLoading.value = true
-        isError.value = false
-        newsList.clear()
+    fun fetchNews(context: Context, isInitial: Boolean) {
+        category ?: return
+        if (isInitial) {
+            isLoading.value = true
+            isError.value = false
+            isRefresh.value = false
+
+            page = 1
+            newsList.clear()
+        }
 
         viewModelScope.launch {
             try {
                 val topHeadlinesNewsResponse = TopHeadlinesNewsRepository(context)
-                val result = topHeadlinesNewsResponse.getTopHeadlinesNews(category, page)
+                val result = topHeadlinesNewsResponse.getTopHeadlinesNews(category!!, page)
                 if (result.isSuccessful) {
                     val response = result.body() ?: throw Exception()
                     newsList.addAll(response.articles)
