@@ -42,7 +42,7 @@ interface NewsApiService {
      * 検索条件に一致したニュースを取得する
      */
     @GET("/v2/everything")
-    fun getEverythingNews(
+    suspend fun getEverythingNews(
         @Query("api_key") apiKey: String,
         @Query("q") q: String,
         @Query("page") page: Int,
@@ -52,7 +52,7 @@ interface NewsApiService {
      * カテゴリ毎に最新ニュースを取得する
      */
     @GET("v2/top-headlines")
-    fun getTopHeadlinesNews(
+    suspend fun getTopHeadlinesNews(
         @Query("api_key") apiKey: String,
         @Query("country") country: String,
         @Query("category") category: String,
