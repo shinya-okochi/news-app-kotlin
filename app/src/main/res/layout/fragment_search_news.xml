@@ -35,7 +35,8 @@
                     android:layout_height="match_parent"
                     app:iconifiedByDefault="false"
                     app:queryBackground="@android:color/transparent"
-                    app:queryHint="@string/news_query_hint" />
+                    app:queryHint="@string/news_query_hint"
+                    app:theme="@style/SearchView" />
 
             </androidx.cardview.widget.CardView>
 
