@@ -7,6 +7,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.newsapp.data.local.DataManager
 import com.example.newsapp.data.remote.newsApi.repository.EverythingNewsRepository
 import com.example.newsapp.data.remote.newsApi.response.common.Article
 import kotlinx.coroutines.launch
@@ -21,7 +22,7 @@ class SearchNewsViewModel(val app: Application) : AndroidViewModel(app) {
     var searchWord: String? = null
 
     var historyListAdapter: SearchWordHistoryAdapter? = null
-    var historyList = mutableListOf<String>()
+    var historyList = DataManager.searchWordHistoryList
     var newsListAdapter: NewsListAdapter? = null
     var newsList = mutableListOf<Article>()
 
@@ -63,6 +64,14 @@ class SearchNewsViewModel(val app: Application) : AndroidViewModel(app) {
      */
     fun fetchNews(context: Context, isInitial: Boolean) {
         if (searchWord.isNullOrBlank()) return
+
+        // 検索履歴に追加・保存・更新する
+        historyList.add(0, searchWord!!)
+        DataManager.searchWordHistoryList = historyList
+        historyList.clear()
+        historyList.addAll(DataManager.searchWordHistoryList)
+        historyListAdapter?.notifyDataSetChanged()
+
         if (isInitial) {
             isLoading.value = true
             isError.value = false
