@@ -2,10 +2,12 @@ package com.example.newsapp.ui.news
 
 import android.app.Application
 import android.content.Context
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
+import com.example.newsapp.data.local.DataManager
 import com.example.newsapp.data.remote.newsApi.repository.EverythingNewsRepository
 import com.example.newsapp.data.remote.newsApi.response.common.Article
 import kotlinx.coroutines.launch
@@ -15,9 +17,12 @@ class SearchNewsViewModel(val app: Application) : AndroidViewModel(app) {
     var isLoading = MutableLiveData(false)
     var isError = MutableLiveData(false)
     var isRefresh = MutableLiveData(false)
+    var hasFocusOnSearchView = MutableLiveData(true)
 
     var searchWord: String? = null
 
+    var historyListAdapter: SearchWordHistoryAdapter? = null
+    var historyList = DataManager.searchWordHistoryList
     var newsListAdapter: NewsListAdapter? = null
     var newsList = mutableListOf<Article>()
 
@@ -25,16 +30,42 @@ class SearchNewsViewModel(val app: Application) : AndroidViewModel(app) {
     private var page = 1
 
     /**
+     * SearchViewの入力欄押下時のリスナー
+     */
+    val onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+        if (hasFocus) hasFocusOnSearchView.value = true
+    }
+
+    /**
+     * SearchViewの閉じるボタン押下時のリスナー
+     */
+    val onCloseListener = SearchView.OnCloseListener {
+        hasFocusOnSearchView.value = true
+        return@OnCloseListener true
+    }
+
+    /**
      * SearchViewのキーワード入力完了時のリスナー
      */
-    fun getOnQueryTextListener(context: Context) = object : SearchView.OnQueryTextListener {
-        override fun onQueryTextSubmit(query: String?): Boolean {
-            searchWord = query
-            fetchNews(context, true)
-            return false
+    fun getOnQueryTextListener(context: Context, view: View) =
+        object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                view.clearFocus()
+                searchWord = query
+                fetchNews(context, true)
+                return false
+            }
+
+            override fun onQueryTextChange(newText: String?): Boolean = false
         }
 
-        override fun onQueryTextChange(newText: String?): Boolean = false
+    /**
+     * 検索履歴をSharedPreferencesから再取得して更新する
+     */
+    fun reloadSearchWordHistory() {
+        historyList.clear()
+        historyList.addAll(DataManager.searchWordHistoryList)
+        historyListAdapter?.notifyDataSetChanged()
     }
 
     /**
@@ -42,10 +73,17 @@ class SearchNewsViewModel(val app: Application) : AndroidViewModel(app) {
      */
     fun fetchNews(context: Context, isInitial: Boolean) {
         if (searchWord.isNullOrBlank()) return
+
+        // 検索履歴に追加・保存・更新する
+        historyList.add(0, searchWord!!)
+        DataManager.searchWordHistoryList = historyList
+        reloadSearchWordHistory()
+
         if (isInitial) {
             isLoading.value = true
             isError.value = false
             isRefresh.value = false
+            hasFocusOnSearchView.value = false
 
             page = 1
             newsList.clear()
