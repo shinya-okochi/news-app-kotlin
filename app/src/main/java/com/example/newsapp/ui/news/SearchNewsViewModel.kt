@@ -2,6 +2,7 @@ package com.example.newsapp.ui.news
 
 import android.app.Application
 import android.content.Context
+import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
@@ -15,6 +16,8 @@ class SearchNewsViewModel(val app: Application) : AndroidViewModel(app) {
     var isError = MutableLiveData(false)
     var isRefresh = MutableLiveData(false)
 
+    var searchWord: String? = null
+
     var newsListAdapter: NewsListAdapter? = null
     var newsList = mutableListOf<Article>()
 
@@ -22,9 +25,23 @@ class SearchNewsViewModel(val app: Application) : AndroidViewModel(app) {
     private var page = 1
 
     /**
+     * SearchViewのキーワード入力完了時のリスナー
+     */
+    fun getOnQueryTextListener(context: Context) = object : SearchView.OnQueryTextListener {
+        override fun onQueryTextSubmit(query: String?): Boolean {
+            searchWord = query
+            fetchNews(context, true)
+            return false
+        }
+
+        override fun onQueryTextChange(newText: String?): Boolean = false
+    }
+
+    /**
      * キーワードに一致したニュースを取得する
      */
     fun fetchNews(context: Context, isInitial: Boolean) {
+        if (searchWord.isNullOrBlank()) return
         if (isInitial) {
             isLoading.value = true
             isError.value = false
@@ -37,8 +54,7 @@ class SearchNewsViewModel(val app: Application) : AndroidViewModel(app) {
         viewModelScope.launch {
             try {
                 val everythingNewsRepository = EverythingNewsRepository(context)
-                // TODO: 検索ワードは仮
-                val result = everythingNewsRepository.getEverythingNews("サッカー", page)
+                val result = everythingNewsRepository.getEverythingNews(searchWord!!, page)
                 if (result.isSuccessful) {
                     val response = result.body() ?: throw Exception()
                     newsList.addAll(response.articles)

@@ -30,8 +30,12 @@
                 app:cardCornerRadius="8dp">
 
                 <androidx.appcompat.widget.SearchView
+                    android:id="@+id/search_view"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent" />
+                    android:layout_height="match_parent"
+                    app:iconifiedByDefault="false"
+                    app:queryBackground="@android:color/transparent"
+                    app:queryHint="@string/news_query_hint" />
 
             </androidx.cardview.widget.CardView>
 

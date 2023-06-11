@@ -47,6 +47,10 @@ class SearchNewsFragment : Fragment() {
             }
 
             viewModel?.let {
+                searchView.apply {
+                    setOnQueryTextListener(it.getOnQueryTextListener(requireContext()))
+                }
+
                 it.newsListAdapter = NewsListAdapter(it.newsList)
                 recyclerView.apply {
                     layoutManager = LinearLayoutManager(requireContext())
@@ -67,9 +71,6 @@ class SearchNewsFragment : Fragment() {
                         }
                     })
                 }
-
-                // TODO: searchViewから取得するまで仮
-                it.fetchNews(requireContext(), true)
             }
         }
     }
