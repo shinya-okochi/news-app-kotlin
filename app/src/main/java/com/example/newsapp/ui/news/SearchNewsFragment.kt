@@ -6,6 +6,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.newsapp.databinding.FragmentSearchNewsBinding
 import com.example.newsapp.ui.MainActivity
 
@@ -41,6 +44,32 @@ class SearchNewsFragment : Fragment() {
                 toolbar.setNavigationOnClickListener {
                     activity.supportFragmentManager.popBackStack()
                 }
+            }
+
+            viewModel?.let {
+                it.newsListAdapter = NewsListAdapter(it.newsList)
+                recyclerView.apply {
+                    layoutManager = LinearLayoutManager(requireContext())
+                    setHasFixedSize(true)
+                    adapter = it.newsListAdapter
+                    addItemDecoration(
+                        DividerItemDecoration(
+                            requireContext(), LinearLayoutManager(requireContext()).orientation
+                        )
+                    )
+                    addOnScrollListener(object : RecyclerView.OnScrollListener() {
+                        override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                            super.onScrolled(recyclerView, dx, dy)
+                            // リストの末尾に来た時の処理
+                            if (recyclerView.canScrollVertically(1).not()) {
+                                it.fetchNews(requireContext(), false)
+                            }
+                        }
+                    })
+                }
+
+                // TODO: searchViewから取得するまで仮
+                it.fetchNews(requireContext(), true)
             }
         }
     }
