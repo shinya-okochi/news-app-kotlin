@@ -19,6 +19,8 @@ class SearchNewsViewModel(val app: Application) : AndroidViewModel(app) {
 
     var searchWord: String? = null
 
+    var historyListAdapter: SearchWordHistoryAdapter? = null
+    var historyList = mutableListOf<String>()
     var newsListAdapter: NewsListAdapter? = null
     var newsList = mutableListOf<Article>()
 
@@ -47,6 +49,7 @@ class SearchNewsViewModel(val app: Application) : AndroidViewModel(app) {
             isLoading.value = true
             isError.value = false
             isRefresh.value = false
+            hasFocusOnSearchView.value = false
 
             page = 1
             newsList.clear()

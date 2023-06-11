@@ -79,6 +79,7 @@
                     android:background="@color/light_gray" />
 
                 <androidx.recyclerview.widget.RecyclerView
+                    android:id="@+id/search_word_history_recycler_view"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content" />
 

@@ -49,6 +49,31 @@ class SearchNewsFragment : Fragment() {
             viewModel?.let { viewModel ->
                 searchView.apply {
                     setOnQueryTextListener(viewModel.getOnQueryTextListener(requireContext()))
+                    // SearchViewにフォーカスがあたったら検索履歴を表示する
+                    setOnQueryTextFocusChangeListener { _, hasFocus ->
+                        if (hasFocus) viewModel.hasFocusOnSearchView.value = true
+                    }
+                }
+
+                viewModel.historyListAdapter = SearchWordHistoryAdapter(
+                    historyList = viewModel.historyList,
+                    callback = object : SearchWordHistoryAdapter.SearchWordHistoryCallback {
+                        override fun onClick(word: String) {
+                            // SearchViewのQueryに設定する
+                            searchView.setQuery(word, true)
+                        }
+
+                    }
+                )
+                searchWordHistoryRecyclerView.apply {
+                    layoutManager = LinearLayoutManager(requireContext())
+                    setHasFixedSize(true)
+                    adapter = viewModel.historyListAdapter
+                    addItemDecoration(
+                        DividerItemDecoration(
+                            requireContext(), LinearLayoutManager(requireContext()).orientation
+                        )
+                    )
                 }
 
                 viewModel.newsListAdapter = NewsListAdapter(viewModel.newsList)
