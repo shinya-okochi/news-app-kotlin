@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import com.example.newsapp.R
 import com.example.newsapp.data.local.constant.NewsCategory
 import com.example.newsapp.databinding.FragmentNewsBinding
 import com.google.android.material.tabs.TabLayoutMediator
@@ -31,6 +32,14 @@ class NewsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         binding.apply {
+            toolbar.setOnMenuItemClickListener {
+                val transaction = requireActivity().supportFragmentManager.beginTransaction()
+                transaction.replace(R.id.container, SearchNewsFragment.newInstance())
+                transaction.addToBackStack(null)
+                transaction.commit()
+                true
+            }
+
             // タブに表示するカテゴリ
             val categoryArray = NewsCategory.values().map { it.categoryName }
             viewPager.adapter = NewsCategoryAdapter(this@NewsFragment, categoryArray)

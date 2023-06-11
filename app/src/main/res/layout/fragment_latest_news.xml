@@ -7,7 +7,7 @@
 
         <variable
             name="viewModel"
-            type="com.example.newsapp.ui.news.NewsContentViewModel" />
+            type="com.example.newsapp.ui.news.LatestNewsViewModel" />
     </data>
 
     <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"

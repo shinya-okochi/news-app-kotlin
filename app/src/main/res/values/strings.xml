@@ -8,4 +8,7 @@
     <string name="news_title">最新ニュース</string>
     <string name="news_error_msg">エラーが発生しました</string>
     <string name="news_retry_button_text">再読み込み</string>
+    <string name="news_query_hint">キーワードを入力してください</string>
+    <string name="news_search_word_history_title">最近の検索</string>
+
 </resources>
