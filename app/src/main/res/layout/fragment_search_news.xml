@@ -46,7 +46,7 @@
             android:id="@+id/line"
             android:layout_width="match_parent"
             android:layout_height="1dp"
-            android:background="@color/light_gray"
+            android:background="?android:attr/listDivider"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/toolbar" />
@@ -76,7 +76,7 @@
                 <View
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
-                    android:background="@color/light_gray" />
+                    android:background="?android:attr/listDivider" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/search_word_history_recycler_view"
