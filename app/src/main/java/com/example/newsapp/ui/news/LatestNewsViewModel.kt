@@ -9,7 +9,7 @@ import com.example.newsapp.data.remote.newsApi.repository.TopHeadlinesNewsReposi
 import com.example.newsapp.data.remote.newsApi.response.common.Article
 import kotlinx.coroutines.launch
 
-class NewsContentViewModel(app: Application) : AndroidViewModel(app) {
+class LatestNewsViewModel(app: Application) : AndroidViewModel(app) {
     // View表示用変数
     var isLoading = MutableLiveData(false)
     var isError = MutableLiveData(false)
@@ -17,7 +17,7 @@ class NewsContentViewModel(app: Application) : AndroidViewModel(app) {
 
     var category: String? = null
 
-    var newsContentAdapter: NewsContentAdapter? = null
+    var newsListAdapter: NewsListAdapter? = null
     var newsList = mutableListOf<Article>()
 
     // News APIで取得するデータのページ
@@ -44,7 +44,7 @@ class NewsContentViewModel(app: Application) : AndroidViewModel(app) {
                 if (result.isSuccessful) {
                     val response = result.body() ?: throw Exception()
                     newsList.addAll(response.articles)
-                    newsContentAdapter?.notifyDataSetChanged()
+                    newsListAdapter?.notifyDataSetChanged()
                     page = page.inc()
                     isLoading.value = false
                 } else throw Exception()

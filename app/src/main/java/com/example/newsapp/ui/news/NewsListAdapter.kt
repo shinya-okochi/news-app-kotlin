@@ -9,18 +9,18 @@ import com.bumptech.glide.Glide
 import com.example.newsapp.R
 import com.example.newsapp.data.local.constant.DateFormat
 import com.example.newsapp.data.remote.newsApi.response.common.Article
-import com.example.newsapp.databinding.ItemNewsContentBinding
+import com.example.newsapp.databinding.ItemNewsCellBinding
 import java.util.Calendar
 import java.util.Date
 
-class NewsContentAdapter(
+class NewsListAdapter(
     private val newsList: List<Article>
-) : RecyclerView.Adapter<NewsContentAdapter.ViewHolder>() {
-    class ViewHolder(var view: ItemNewsContentBinding) : RecyclerView.ViewHolder(view.root)
+) : RecyclerView.Adapter<NewsListAdapter.ViewHolder>() {
+    class ViewHolder(var view: ItemNewsCellBinding) : RecyclerView.ViewHolder(view.root)
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = ItemNewsContentBinding.inflate(inflater, parent, false)
+        val view = ItemNewsCellBinding.inflate(inflater, parent, false)
         return ViewHolder(view)
     }
 
