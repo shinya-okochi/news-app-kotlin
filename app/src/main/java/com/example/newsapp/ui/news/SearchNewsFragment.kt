@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.newsapp.databinding.FragmentSearchNewsBinding
+import com.example.newsapp.ui.MainActivity
 
 class SearchNewsFragment : Fragment() {
     companion object {
@@ -29,6 +30,19 @@ class SearchNewsFragment : Fragment() {
             lifecycleOwner = this@SearchNewsFragment
         }
         return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        binding.apply {
+            (activity as? MainActivity)?.let { activity ->
+                activity.setSupportActionBar(toolbar)
+                activity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                toolbar.setNavigationOnClickListener {
+                    activity.supportFragmentManager.popBackStack()
+                }
+            }
+        }
     }
 
     override fun onDestroyView() {
