@@ -48,11 +48,10 @@ class SearchNewsFragment : Fragment() {
 
             viewModel?.let { viewModel ->
                 searchView.apply {
-                    setOnQueryTextListener(viewModel.getOnQueryTextListener(requireContext()))
                     // SearchViewにフォーカスがあたったら検索履歴を表示する
-                    setOnQueryTextFocusChangeListener { _, hasFocus ->
-                        if (hasFocus) viewModel.hasFocusOnSearchView.value = true
-                    }
+                    setOnQueryTextFocusChangeListener(viewModel.onFocusChangeListener)
+                    setOnCloseListener(viewModel.onCloseListener)
+                    setOnQueryTextListener(viewModel.getOnQueryTextListener(requireContext(), searchView))
                 }
 
                 viewModel.historyListAdapter = SearchWordHistoryAdapter(

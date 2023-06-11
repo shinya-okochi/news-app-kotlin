@@ -2,6 +2,7 @@ package com.example.newsapp.ui.news
 
 import android.app.Application
 import android.content.Context
+import android.view.View
 import androidx.appcompat.widget.SearchView
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.MutableLiveData
@@ -28,17 +29,34 @@ class SearchNewsViewModel(val app: Application) : AndroidViewModel(app) {
     private var page = 1
 
     /**
+     * SearchViewの入力欄押下時のリスナー
+     */
+    val onFocusChangeListener = View.OnFocusChangeListener { _, hasFocus ->
+        if (hasFocus) hasFocusOnSearchView.value = true
+    }
+
+    /**
+     * SearchViewの閉じるボタン押下時のリスナー
+     */
+    val onCloseListener = SearchView.OnCloseListener {
+        hasFocusOnSearchView.value = true
+        return@OnCloseListener true
+    }
+
+    /**
      * SearchViewのキーワード入力完了時のリスナー
      */
-    fun getOnQueryTextListener(context: Context) = object : SearchView.OnQueryTextListener {
-        override fun onQueryTextSubmit(query: String?): Boolean {
-            searchWord = query
-            fetchNews(context, true)
-            return false
-        }
+    fun getOnQueryTextListener(context: Context, view: View) =
+        object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String?): Boolean {
+                view.clearFocus()
+                searchWord = query
+                fetchNews(context, true)
+                return false
+            }
 
-        override fun onQueryTextChange(newText: String?): Boolean = false
-    }
+            override fun onQueryTextChange(newText: String?): Boolean = false
+        }
 
     /**
      * キーワードに一致したニュースを取得する
