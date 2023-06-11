@@ -47,14 +47,14 @@ class LatestNewsFragment : Fragment() {
             // 色の設定
             swipeRefresh.setColorSchemeColors(requireContext().getColor(R.color.light_gray))
 
-            viewModel?.let {
-                it.category = arguments?.getString(ARG_CATEGORY_NAME)!!
+            viewModel?.let { viewModel ->
+                viewModel.category = arguments?.getString(ARG_CATEGORY_NAME)!!
 
-                it.newsListAdapter = NewsListAdapter(it.newsList)
+                viewModel.newsListAdapter = NewsListAdapter(viewModel.newsList)
                 recyclerView.apply {
                     layoutManager = LinearLayoutManager(requireContext())
                     setHasFixedSize(true)
-                    adapter = it.newsListAdapter
+                    adapter = viewModel.newsListAdapter
                     addItemDecoration(
                         DividerItemDecoration(
                             requireContext(), LinearLayoutManager(requireContext()).orientation
@@ -65,7 +65,7 @@ class LatestNewsFragment : Fragment() {
                             super.onScrolled(recyclerView, dx, dy)
                             // リストの末尾に来た時の処理
                             if (recyclerView.canScrollVertically(1).not()) {
-                                it.fetchNews(requireContext(), false)
+                                viewModel.fetchNews(requireContext(), false)
                             }
                         }
                     })

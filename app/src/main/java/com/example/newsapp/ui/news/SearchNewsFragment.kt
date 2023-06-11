@@ -46,16 +46,16 @@ class SearchNewsFragment : Fragment() {
                 }
             }
 
-            viewModel?.let {
+            viewModel?.let { viewModel ->
                 searchView.apply {
-                    setOnQueryTextListener(it.getOnQueryTextListener(requireContext()))
+                    setOnQueryTextListener(viewModel.getOnQueryTextListener(requireContext()))
                 }
 
-                it.newsListAdapter = NewsListAdapter(it.newsList)
+                viewModel.newsListAdapter = NewsListAdapter(viewModel.newsList)
                 recyclerView.apply {
                     layoutManager = LinearLayoutManager(requireContext())
                     setHasFixedSize(true)
-                    adapter = it.newsListAdapter
+                    adapter = viewModel.newsListAdapter
                     addItemDecoration(
                         DividerItemDecoration(
                             requireContext(), LinearLayoutManager(requireContext()).orientation
@@ -66,7 +66,7 @@ class SearchNewsFragment : Fragment() {
                             super.onScrolled(recyclerView, dx, dy)
                             // リストの末尾に来た時の処理
                             if (recyclerView.canScrollVertically(1).not()) {
-                                it.fetchNews(requireContext(), false)
+                                viewModel.fetchNews(requireContext(), false)
                             }
                         }
                     })
