@@ -15,6 +15,7 @@ class SearchNewsViewModel(val app: Application) : AndroidViewModel(app) {
     var isLoading = MutableLiveData(false)
     var isError = MutableLiveData(false)
     var isRefresh = MutableLiveData(false)
+    var hasFocusOnSearchView = MutableLiveData(true)
 
     var searchWord: String? = null
 
