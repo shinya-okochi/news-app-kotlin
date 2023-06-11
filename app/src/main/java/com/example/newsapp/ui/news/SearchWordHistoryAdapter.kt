@@ -24,17 +24,14 @@ class SearchWordHistoryAdapter(
         holder.view.apply {
             searchWord.text = word
 
-            closeBtn.setOnClickListener {
-                // TODO: 検索履歴からキーワードを削除する
-            }
+            closeBtn.setOnClickListener { callback.onClickDeleteBtn(word) }
 
-            root.setOnClickListener {
-                callback.onClick(word)
-            }
+            root.setOnClickListener { callback.onClick(word) }
         }
     }
 
     interface SearchWordHistoryCallback {
         fun onClick(word: String)
+        fun onClickDeleteBtn(word: String)
     }
 }

@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.newsapp.data.local.DataManager
 import com.example.newsapp.databinding.FragmentSearchNewsBinding
 import com.example.newsapp.ui.MainActivity
 
@@ -62,6 +63,15 @@ class SearchNewsFragment : Fragment() {
                             searchView.setQuery(word, true)
                         }
 
+                        override fun onClickDeleteBtn(word: String) {
+                            // 検索履歴からキーワードを削除する
+                            val historyList = DataManager.searchWordHistoryList
+                            historyList.remove(word)
+                            DataManager.searchWordHistoryList = historyList
+
+                            // 更新
+                            viewModel.reloadSearchWordHistory()
+                        }
                     }
                 )
                 searchWordHistoryRecyclerView.apply {

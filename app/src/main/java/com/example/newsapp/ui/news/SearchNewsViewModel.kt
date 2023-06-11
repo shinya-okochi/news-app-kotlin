@@ -60,6 +60,15 @@ class SearchNewsViewModel(val app: Application) : AndroidViewModel(app) {
         }
 
     /**
+     * 検索履歴をSharedPreferencesから再取得して更新する
+     */
+    fun reloadSearchWordHistory() {
+        historyList.clear()
+        historyList.addAll(DataManager.searchWordHistoryList)
+        historyListAdapter?.notifyDataSetChanged()
+    }
+
+    /**
      * キーワードに一致したニュースを取得する
      */
     fun fetchNews(context: Context, isInitial: Boolean) {
@@ -68,9 +77,7 @@ class SearchNewsViewModel(val app: Application) : AndroidViewModel(app) {
         // 検索履歴に追加・保存・更新する
         historyList.add(0, searchWord!!)
         DataManager.searchWordHistoryList = historyList
-        historyList.clear()
-        historyList.addAll(DataManager.searchWordHistoryList)
-        historyListAdapter?.notifyDataSetChanged()
+        reloadSearchWordHistory()
 
         if (isInitial) {
             isLoading.value = true
