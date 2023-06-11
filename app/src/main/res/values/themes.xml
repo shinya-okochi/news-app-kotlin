@@ -6,4 +6,9 @@
     </style>
 
     <style name="Theme.NewsApp" parent="Base.Theme.NewsApp" />
+
+    <style name="SearchView" parent="Widget.AppCompat.SearchView">
+        <item name="android:textSize">12sp</item>
+    </style>
+
 </resources>

@@ -10,5 +10,5 @@ class NewsCategoryAdapter(
     override fun getItemCount(): Int = categoryArray.size
 
     override fun createFragment(position: Int): Fragment =
-        NewsContentFragment.newInstance(categoryArray[position])
+        LatestNewsFragment.newInstance(categoryArray[position])
 }

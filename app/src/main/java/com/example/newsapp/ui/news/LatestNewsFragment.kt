@@ -10,33 +10,33 @@ import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.newsapp.R
-import com.example.newsapp.databinding.FragmentNewsContentBinding
+import com.example.newsapp.databinding.FragmentLatestNewsBinding
 
-class NewsContentFragment : Fragment() {
+class LatestNewsFragment : Fragment() {
     companion object {
         private const val ARG_CATEGORY_NAME = "ARG_CATEGORY_NAME"
 
         @JvmStatic
-        fun newInstance(categoryName: String) = NewsContentFragment().apply {
+        fun newInstance(categoryName: String) = LatestNewsFragment().apply {
             arguments = Bundle().apply {
                 putString(ARG_CATEGORY_NAME, categoryName)
             }
         }
     }
 
-    private var _binding: FragmentNewsContentBinding? = null
+    private var _binding: FragmentLatestNewsBinding? = null
     private val binding
         get() = _binding!!
-    private val viewModel: NewsContentViewModel by viewModels()
+    private val viewModel: LatestNewsViewModel by viewModels()
 
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
-        _binding = FragmentNewsContentBinding.inflate(inflater, container, false).apply {
-            viewModel = this@NewsContentFragment.viewModel
-            lifecycleOwner = this@NewsContentFragment
+        _binding = FragmentLatestNewsBinding.inflate(inflater, container, false).apply {
+            viewModel = this@LatestNewsFragment.viewModel
+            lifecycleOwner = this@LatestNewsFragment
         }
         return binding.root
     }
@@ -47,14 +47,14 @@ class NewsContentFragment : Fragment() {
             // 色の設定
             swipeRefresh.setColorSchemeColors(requireContext().getColor(R.color.light_gray))
 
-            viewModel?.let {
-                it.category = arguments?.getString(ARG_CATEGORY_NAME)!!
+            viewModel?.let { viewModel ->
+                viewModel.category = arguments?.getString(ARG_CATEGORY_NAME)!!
 
-                it.newsContentAdapter = NewsContentAdapter(it.newsList)
+                viewModel.newsListAdapter = NewsListAdapter(viewModel.newsList)
                 recyclerView.apply {
                     layoutManager = LinearLayoutManager(requireContext())
                     setHasFixedSize(true)
-                    adapter = it.newsContentAdapter
+                    adapter = viewModel.newsListAdapter
                     addItemDecoration(
                         DividerItemDecoration(
                             requireContext(), LinearLayoutManager(requireContext()).orientation
@@ -65,7 +65,7 @@ class NewsContentFragment : Fragment() {
                             super.onScrolled(recyclerView, dx, dy)
                             // リストの末尾に来た時の処理
                             if (recyclerView.canScrollVertically(1).not()) {
-                                it.fetchNews(requireContext(), false)
+                                viewModel.fetchNews(requireContext(), false)
                             }
                         }
                     })
